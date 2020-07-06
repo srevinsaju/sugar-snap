@@ -1,0 +1,12 @@
+4,5c4,5
+< 	$(PYTHON) -m em -D scaling=\'72\' $(srcdir)/gtkrc.em > \
+< 		$(top_builddir)/data/sugar-72.gtkrc
+---
+> 	$(PYTHON) - -D scaling=\'72\' $(srcdir)/gtkrc.em > \
+> 		$(top_builddir)/data/sugar-72.gtkrc < $(EMPY)
+8,9c8,9
+< 	$(PYTHON) -m em -D scaling=\'100\' $(srcdir)/gtkrc.em > \
+< 		$(top_builddir)/data/sugar-100.gtkrc
+---
+> 	$(PYTHON) - -D scaling=\'100\' $(srcdir)/gtkrc.em > \
+> 		$(top_builddir)/data/sugar-100.gtkrc < $(EMPY)

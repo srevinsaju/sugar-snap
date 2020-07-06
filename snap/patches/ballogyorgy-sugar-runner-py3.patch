@@ -1,0 +1,91 @@
+diff --git a/scripts/sugar-runner.in b/scripts/sugar-runner.in
+index f39bdfb..ac75e23 100644
+--- a/scripts/sugar-runner.in
++++ b/scripts/sugar-runner.in
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2 -u
++#!/usr/bin/python3 -u
+ 
+ # Copyright (C) 2013, Daniel Narvaez
+ #
+@@ -66,7 +66,7 @@ def _allow_to_run_x():
+     except IOError:
+         return
+ 
+-    print "We need to allow everybody to run the X server"
++    print("We need to allow everybody to run the X server")
+     tweak_wrapper = os.path.join(helpers_dir, "tweak-xwrapper")
+     subprocess.check_call(["sudo", "-k", tweak_wrapper])
+ 
+@@ -83,7 +83,7 @@ def _run_xephyr_window(resolution):
+ 
+ def _get_tty_number():
+     tty = subprocess.check_output(["tty"])
+-    head, tail = os.path.split(tty)
++    head, tail = os.path.split(tty.decode('ascii'))
+     return tail.strip().replace("tty", "")
+ 
+ 
+diff --git a/scripts/tweak-xwrapper b/scripts/tweak-xwrapper
+index 05f9c6e..d4783ca 100644
+--- a/scripts/tweak-xwrapper
++++ b/scripts/tweak-xwrapper
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2 -u
++#!/usr/bin/python3 -u
+ 
+ # Copyright (C) 2013, Daniel Narvaez
+ #
+diff --git a/scripts/xephyr-window b/scripts/xephyr-window
+index 0c5e98b..d9c70c8 100644
+--- a/scripts/xephyr-window
++++ b/scripts/xephyr-window
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2 -u
++#!/usr/bin/python3 -u
+ 
+ # Copyright (C) 2013, Daniel Narvaez
+ #
+@@ -40,5 +40,5 @@ SugarRunner.window_create(int(width), int(height), fullscreen)
+ while SugarRunner.window_wait():
+     if not fullscreen or SugarRunner.window_is_fullscreen():
+         if not xid_printed:
+-            print SugarRunner.window_get_xid()
++            print(SugarRunner.window_get_xid())
+             xid_printed = True
+diff --git a/scripts/xinitrc b/scripts/xinitrc
+index 904822e..445b89b 100644
+--- a/scripts/xinitrc
++++ b/scripts/xinitrc
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ 
+ # Copyright (C) 2013, Daniel Narvaez
+ #
+@@ -48,7 +48,7 @@ def _load_xkb_config():
+     if "SUGAR_RUNNER_XKBCONFIG" not in os.environ:
+         return
+ 
+-    with open(os.environ["SUGAR_RUNNER_XKBCONFIG"]) as f:
++    with open(os.environ["SUGAR_RUNNER_XKBCONFIG"], 'rb') as f:
+         config = f.read()
+ 
+     process = subprocess.Popen(["xkbcomp", "-", os.environ["DISPLAY"]],
+@@ -65,14 +65,14 @@ def _add_output_to_environ(output):
+ 
+ def _start_dbus():
+     output = subprocess.check_output(["dbus-launch", "--exit-with-session"])
+-    _add_output_to_environ(output)
++    _add_output_to_environ(output.decode('ascii'))
+ 
+ 
+ def _start_keyring():
+     output = subprocess.check_output(["gnome-keyring-daemon",
+                                       "--start", "-d",
+                                       "--components=secrets,pkcs11,ssh,gpg"])
+-    _add_output_to_environ(output)
++    _add_output_to_environ(output.decode('ascii'))
+ 
+ 
+ def _setup_xdg_user_dirs():
